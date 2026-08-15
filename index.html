@@ -30,40 +30,161 @@
 
         h1 {
             text-align: center;
-            margin-bottom: 25px;
+        }
+
+        #display {
+            width: 100%;
+            height: 65px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: none;
+            border-radius: 12px;
+            background: #f1f1f1;
+            font-size: 28px;
+            text-align: right;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 20px;
+            cursor: pointer;
+            background: #eeeeee;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .operator {
+            background: #667eea;
+            color: white;
+        }
+
+        .equal {
+            background: #764ba2;
+            color: white;
+        }
+
+        .clear {
+            background: #ff6b6b;
+            color: white;
         }
 
         .history {
-            padding: 20px;
+            margin-top: 20px;
+            padding: 15px;
             background: #f5f5f5;
-            border-radius: 15px;
+            border-radius: 12px;
         }
 
         .history h2 {
             margin-top: 0;
-        }
-
-        #historyList {
-            color: #666;
+            font-size: 20px;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="calculator">
+<div class="calculator">
 
-        <h1>Smart Calculator</h1>
+    <h1>Smart Calculator</h1>
 
-        <div class="history">
-            <h2>Calculation History</h2>
+    <input type="text" id="display" readonly>
 
-            <div id="historyList">
-                <p>No calculations yet.</p>
-            </div>
-        </div>
+    <div class="buttons">
+
+        <button class="clear" onclick="clearDisplay()">C</button>
+        <button onclick="deleteLast()">⌫</button>
+        <button class="operator" onclick="appendValue('/')">÷</button>
+        <button class="operator" onclick="appendValue('*')">×</button>
+
+        <button onclick="appendValue('7')">7</button>
+        <button onclick="appendValue('8')">8</button>
+        <button onclick="appendValue('9')">9</button>
+        <button class="operator" onclick="appendValue('-')">−</button>
+
+        <button onclick="appendValue('4')">4</button>
+        <button onclick="appendValue('5')">5</button>
+        <button onclick="appendValue('6')">6</button>
+        <button class="operator" onclick="appendValue('+')">+</button>
+
+        <button onclick="appendValue('1')">1</button>
+        <button onclick="appendValue('2')">2</button>
+        <button onclick="appendValue('3')">3</button>
+        <button class="equal" onclick="calculate()">=</button>
+
+        <button onclick="appendValue('0')">0</button>
+        <button onclick="appendValue('.')">.</button>
 
     </div>
+
+    <div class="history">
+        <h2>Calculation History</h2>
+
+        <div id="historyList">
+            <p>No calculations yet.</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    const display = document.getElementById("display");
+    const historyList = document.getElementById("historyList");
+
+    function appendValue(value) {
+        display.value += value;
+    }
+
+    function clearDisplay() {
+        display.value = "";
+    }
+
+    function deleteLast() {
+        display.value = display.value.slice(0, -1);
+    }
+
+    function calculate() {
+
+        if (display.value === "") {
+            return;
+        }
+
+        try {
+
+            const expression = display.value;
+            const result = eval(expression);
+
+            display.value = result;
+
+            if (historyList.innerText.includes("No calculations yet.")) {
+                historyList.innerHTML = "";
+            }
+
+            const item = document.createElement("p");
+
+            item.textContent = expression + " = " + result;
+
+            historyList.prepend(item);
+
+        } catch {
+
+            display.value = "Error";
+
+        }
+    }
+
+</script>
 
 </body>
 </html>
